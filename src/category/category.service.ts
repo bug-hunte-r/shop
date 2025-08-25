@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, ConflictException } from '@nestjs/common';
+import { BadRequestException, Injectable, ConflictException, NotFoundException } from '@nestjs/common';
 import { AddCategoryDto } from './add-category-dto/add-category-dto';
 import Category from 'models/category';
 @Injectable()
@@ -9,9 +9,9 @@ export class CategoryService {
         if (!addCategoryDto.title.trim()) {
             throw new BadRequestException('Data is not valid')
         }
-        
+
         const isCategoryExist = await Category.findOne({ title: addCategoryDto.title })
-        
+
         if (isCategoryExist) {
             throw new ConflictException('This category is already exist')
         }
@@ -19,5 +19,16 @@ export class CategoryService {
         await Category.create({ ...addCategoryDto })
 
         return 'Category add successfully'
+    }
+
+    async getAllCategories() {
+
+        const allCategories = await Category.find({})
+
+        if (allCategories.length === 0) {
+            throw new NotFoundException('Dont have any category yet')
+        }
+
+        return allCategories
     }
 }

@@ -22,6 +22,25 @@ export class CategoryController {
       })
 
     }
-    
+
+  }
+
+  @Get()
+  async getAllCategories(@Res() res: Response) {
+    try {
+
+      const allCategories = await this.categoryService.getAllCategories()
+
+      res.status(200).json({
+        data: allCategories
+      })
+
+    } catch (error) {
+
+      res.status(error.getStatus ? error.getStatus() : 500).json({
+        message: error.message
+      })
+
+    }
   }
 }
