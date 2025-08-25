@@ -1,6 +1,10 @@
-import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
+import { Injectable, BadRequestException, ConflictException } from '@nestjs/common';
+import { SignupDto } from './signup-dto/signup-dto';
+import User from 'models/user';
 
 @Injectable()
 export class UsersService {
+
+
+
 }
