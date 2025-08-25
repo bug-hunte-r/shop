@@ -18,11 +18,17 @@ export class UsersService {
             throw new ConflictException('Username is already exist')
         }
 
+        const isMobileExist = await User.findOne({ mobile: signupDto.mobile })
+
+        if (isMobileExist) {
+            throw new ConflictException('Mobile is already exist')
+        }
+
         const hashedPass = await hasePassHandler(signupDto.password)
 
         const users = await User.countDocuments()
 
-        await User.create({ ...signupDto, password: hashedPass, role: users === 0 ? 'USER' : 'ADMIN' })
+        await User.create({ ...signupDto, password: hashedPass, role: users > 0 ? 'USER' : 'ADMIN' })
 
         return 'User signuped successfully'
     }

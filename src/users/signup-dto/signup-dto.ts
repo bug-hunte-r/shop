@@ -11,8 +11,6 @@ export class SignupDto {
     username: string;
 
     @IsInt()
-    @MaxLength(11)
-    @MinLength(0)
     mobile: number;
 
     @IsString()
