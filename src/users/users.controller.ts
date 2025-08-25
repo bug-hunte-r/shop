@@ -3,6 +3,7 @@ import { UsersService } from './users.service';
 import { SignupDto } from './signup-dto/signup-dto';
 import type { Request, Response } from 'express';
 import { generateToken } from 'configs/auth';
+import { LoginDto } from './login-dto/login-dto';
 
 @Controller('users')
 export class UsersController {
@@ -38,4 +39,35 @@ export class UsersController {
     }
   }
 
+  @Post('Login')
+  async LoginUser(@Body() loginDto: LoginDto, @Req() req: Request, @Res() res: Response) {
+    try {
+
+      const loginedUser = await this.usersService.LoginUser(loginDto)
+
+      const token = generateToken({ username: loginDto.username })
+
+      res.cookie('token', token, {
+        httpOnly: true,
+        path: '/',
+        sameSite: 'strict',
+        secure: true,
+        maxAge: 1000 * 60 * 60 * 48
+      })
+
+      res.status(200).json({
+        message: loginedUser
+      })
+
+    } catch (error) {
+
+      res.status(error.getStatus ? error.getStatus() : 500).json({
+        message: error.message
+      })
+
+    }
+
+  }
+
+  
 }

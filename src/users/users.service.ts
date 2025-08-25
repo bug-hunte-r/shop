@@ -1,7 +1,8 @@
-import { Injectable, BadRequestException, ConflictException } from '@nestjs/common';
+import { Injectable, BadRequestException, ConflictException, NotFoundException } from '@nestjs/common';
 import { SignupDto } from './signup-dto/signup-dto';
 import User from 'models/user';
-import { hasePassHandler } from 'configs/auth';
+import { hasePassHandler, verifyPassHandler } from 'configs/auth';
+import { LoginDto } from './login-dto/login-dto';
 
 @Injectable()
 export class UsersService {
@@ -31,6 +32,27 @@ export class UsersService {
         await User.create({ ...signupDto, password: hashedPass, role: users > 0 ? 'USER' : 'ADMIN' })
 
         return 'User signuped successfully'
+    }
+
+    async LoginUser(loginDto: LoginDto) {
+
+        if (!loginDto.username.trim() || !loginDto.password.trim()) {
+            throw new BadRequestException('Datas are not valid')
+        }
+
+        const isUserLogin = await User.findOne({ username: loginDto.username })
+
+        if (!isUserLogin) {
+            throw new NotFoundException('Account not found')
+        }
+
+        const verifiedPass = await verifyPassHandler(loginDto.password, isUserLogin.password)
+
+        if (!verifiedPass) {
+            throw new NotFoundException('Username or password is not correct')
+        }
+
+        return 'User Logged in successfully'
     }
 
 }
