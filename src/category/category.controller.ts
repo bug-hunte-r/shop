@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Res, Delete, Param } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { AddCategoryDto } from './add-category-dto/add-category-dto';
 import type { Response } from 'express';
+import mongoose from 'mongoose';
 
 @Controller('category')
 export class CategoryController {
@@ -41,6 +42,23 @@ export class CategoryController {
         message: error.message
       })
 
+    }
+  }
+
+  @Delete(':id')
+  async removeOneCategory(@Param('id') id: mongoose.Types.ObjectId, @Res() res: Response) {
+    try {
+
+      const deletedCategory = await this.categoryService.removeOneCategory(id)
+
+      res.status(200).json({
+        message: deletedCategory
+      })
+
+    } catch (error) {
+      res.status(error.getStatus ? error.getStatus() : 500).json({
+        message: error.message
+      })
     }
   }
 }
