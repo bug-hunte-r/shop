@@ -1,8 +1,9 @@
-import { Injectable, BadRequestException, ConflictException, NotFoundException } from '@nestjs/common';
+import { Injectable, BadRequestException, ConflictException, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { SignupDto } from './signup-dto/signup-dto';
 import User from 'models/user';
-import { hasePassHandler, verifyPassHandler } from 'configs/auth';
+import { hasePassHandler, verifyPassHandler, verifyTokenHandler } from 'configs/auth';
 import { LoginDto } from './login-dto/login-dto';
+import { Request } from 'express';
 
 @Injectable()
 export class UsersService {
@@ -53,6 +54,31 @@ export class UsersService {
         }
 
         return 'User Logged in successfully'
+    }
+
+    async getOneUser(req: Request) {
+        try {
+
+            const token = req.cookies?.['token']
+
+            if (!token) {
+                throw new UnauthorizedException('Token not found')
+            }
+
+            const verifiedToken = await verifyTokenHandler(token)
+
+            if (!verifiedToken) {
+                throw new UnauthorizedException('Token not valid')
+            }
+
+            const mainUser = await User.findOne({ username: verifiedToken.username })
+
+            return mainUser
+
+        } catch (error) {
+            throw new UnauthorizedException('Invalid or expired token')
+        }
+
     }
 
 }

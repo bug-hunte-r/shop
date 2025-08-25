@@ -69,5 +69,24 @@ export class UsersController {
 
   }
 
-  
+  @Get('me')
+  async getOneUser(@Req() req: Request, @Res() res: Response) {
+    try {
+
+      const mainUser = await this.usersService.getOneUser(req)
+
+      res.status(200).json({
+        data: mainUser
+      })
+
+    } catch (error) {
+
+      res.status(error.getStatus ? error.getStatus() : 500).json({
+        message: error.message
+      })
+
+    }
+
+  }
+
 }
