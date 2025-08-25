@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Req, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Req, Res, Delete, Param } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { SignupDto } from './signup-dto/signup-dto';
 import type { Request, Response } from 'express';
 import { generateToken } from 'configs/auth';
 import { LoginDto } from './login-dto/login-dto';
+import mongoose from 'mongoose';
 
 @Controller('users')
 export class UsersController {
@@ -89,4 +90,22 @@ export class UsersController {
 
   }
 
+  @Delete(':id')
+  async deleteOneUser(@Param('id') id: mongoose.Types.ObjectId, @Res() res: Response) {
+    try {
+
+      const deletedUser = await this.usersService.deleteOneUser(id)
+
+      res.status(200).json({
+        message: deletedUser
+      })
+
+    } catch (error) {
+
+      res.status(error.getStatus ? error.getStatus() : 500).json({
+        message: error.message
+      })
+
+    }
+  }
 }

@@ -4,6 +4,7 @@ import User from 'models/user';
 import { hasePassHandler, verifyPassHandler, verifyTokenHandler } from 'configs/auth';
 import { LoginDto } from './login-dto/login-dto';
 import { Request } from 'express';
+import mongoose from 'mongoose';
 
 @Injectable()
 export class UsersService {
@@ -79,6 +80,17 @@ export class UsersService {
             throw new UnauthorizedException('Invalid or expired token')
         }
 
+    }
+
+    async deleteOneUser(id: mongoose.Types.ObjectId) {
+
+        const deletedUser = await User.findByIdAndDelete(id)
+
+        if (!deletedUser) {
+            throw new NotFoundException('User not found')
+        }
+
+        return 'User removed successfully'
     }
 
 }
