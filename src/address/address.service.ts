@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAddressDto } from './dto/create-address.dto';
 import { UsersService } from 'src/users/users.service';
 import Address from 'models/address';
@@ -21,5 +21,16 @@ export class AddressService {
         await Address.create({ ...createAddressDto, user: userId })
 
         return 'Address added successfully'
+    }
+
+    async getAllAddreses() {
+
+        const allAddreses = await Address.find({}).populate('user')
+
+        if (allAddreses.length === 0) {
+            throw new NotFoundException('Dont have any address')
+        }
+
+        return allAddreses
     }
 }

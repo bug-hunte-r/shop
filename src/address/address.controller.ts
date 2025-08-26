@@ -16,12 +16,30 @@ export class AddressController {
       res.status(201).json({
         newAddress
       })
-      
+
     } catch (error) {
       res.status(error.getStatus ? error.getStatus() : 500).json({
         message: error.message
       })
     }
 
+  }
+
+  @Get()
+  async getAllAddreses(@Res() res: Response) {
+    try {
+
+      const allAddreses = await this.addressService.getAllAddreses()
+
+      res.status(200).json({
+        allAddreses
+      })
+
+    } catch (error) {
+      res.status(error.getStatus ? error.getStatus() : 500).json({
+        message: error.message
+      })
+    }
+    
   }
 }
