@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UsersService } from 'src/users/users.service';
 import { Request } from 'express';
@@ -21,5 +21,16 @@ export class CommentsService {
         await Comment.create({ ...createCommentDto, user: userId })
 
         return 'Comment submited successfully'
+    }
+
+    async getAllComments() {
+
+        const allComments = await Comment.find({}).populate('user').populate('product')
+
+        if (allComments.length === 0) {
+            throw new NotFoundException('Dont have any comment')
+        }
+
+        return allComments
     }
 }

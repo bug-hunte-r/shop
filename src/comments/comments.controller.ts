@@ -22,6 +22,23 @@ export class CommentsController {
         message: error.message
       })
     }
-    
+
+  }
+
+  @Get()
+  async getAllComments(@Res() res: Response) {
+    try {
+
+      const allComments = await this.commentsService.getAllComments()
+
+      res.status(200).json({
+        allComments
+      })
+
+    } catch (error) {
+      res.status(error.getStatus ? error.getStatus() : 500).json({
+        message: error.message
+      })
+    }
   }
 }
