@@ -72,7 +72,7 @@ export class UsersService {
                 throw new UnauthorizedException('Token not valid')
             }
 
-            const mainUser = await User.findOne({ username: verifiedToken.username })
+            const mainUser = await User.findOne({ username: verifiedToken.username }).populate('addreses').populate('comments')
 
             return mainUser
 
