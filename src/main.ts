@@ -4,8 +4,8 @@ import { ValidationPipe } from '@nestjs/common';
 import cookieParser from 'cookie-parser'
 import connectToDb from 'configs/db';
 
-connectToDb()
 async function bootstrap() {
+  await connectToDb()
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe())
   app.use(cookieParser())
