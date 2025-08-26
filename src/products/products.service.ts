@@ -1,26 +1,24 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
+import Product from 'models/product';
 
 @Injectable()
 export class ProductsService {
-  create(createProductDto: CreateProductDto) {
-    return 'This action adds a new product';
-  }
 
-  findAll() {
-    return `This action returns all products`;
-  }
+  async AddProduct(createProductDto: CreateProductDto) {
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
-  }
+    const isProductExist = await Product.findOne({ title: createProductDto.title })
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
-  }
+    if (isProductExist) {
+      throw new ConflictException('Product already exist')
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+    const newProduct = await Product.create({ ...createProductDto })
+
+    return {
+      message: 'Product added successfully',
+      data: newProduct.category
+    }
+
   }
 }
