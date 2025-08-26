@@ -33,7 +33,7 @@ export class CategoryController {
       const allCategories = await this.categoryService.getAllCategories()
 
       res.status(200).json({
-        data: allCategories
+        categories: allCategories
       })
 
     } catch (error) {

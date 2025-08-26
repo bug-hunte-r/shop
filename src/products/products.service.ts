@@ -34,7 +34,7 @@ export class ProductsService {
   }
 
   async getAllProducts() {
-    const products = await Product.find({})
+    const products = await Product.find({}).populate('category')
 
     if (products.length === 0) {
       throw new NotFoundException('Products not found')

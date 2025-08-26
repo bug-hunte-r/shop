@@ -24,7 +24,7 @@ export class CategoryService {
 
     async getAllCategories() {
 
-        const allCategories = await Category.find({})
+        const allCategories = await Category.find({}).populate('product')
 
         if (allCategories.length === 0) {
             throw new NotFoundException('Dont have any category yet')
