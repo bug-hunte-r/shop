@@ -4,9 +4,10 @@ import { UsersService } from './users/users.service';
 import { CategoryModule } from './category/category.module';
 import { ProductsModule } from './products/products.module';
 import { CommentsModule } from './comments/comments.module';
+import { AddressModule } from './address/address.module';
 
 @Module({
-  imports: [UsersModule, CategoryModule, ProductsModule, CommentsModule],
+  imports: [UsersModule, CategoryModule, ProductsModule, CommentsModule, AddressModule],
   controllers: [],
   providers: [UsersService],
 })
