@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Res, Delete, Param } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import type { Response } from 'express';
+import mongoose from 'mongoose';
 
 @Controller('products')
 export class ProductsController {
@@ -23,5 +24,23 @@ export class ProductsController {
       })
     }
 
+  }
+
+  @Delete(':id')
+  async DeleteProduct(@Param('id') id: mongoose.Types.ObjectId, @Res() res: Response) {
+    try {
+
+      const deletedProduct = await this.productsService.DeleteProduct(id)
+
+      res.status(200).json({
+        deletedProduct
+      })
+
+    } catch (error) {
+      res.status(error.getStatus ? error.getStatus() : 500).json({
+        message: error.message
+      })
+    }
+    
   }
 }

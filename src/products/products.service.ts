@@ -1,6 +1,7 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import Product from 'models/product';
+import mongoose from 'mongoose';
 
 @Injectable()
 export class ProductsService {
@@ -20,5 +21,15 @@ export class ProductsService {
       data: newProduct.category
     }
 
+  }
+
+  async DeleteProduct(id: mongoose.Types.ObjectId) {
+    const deletedProduct = await Product.findByIdAndDelete(id)
+
+    if (!deletedProduct) {
+      throw new NotFoundException('Product not found')
+    }
+
+    return 'Product deleted successfully'
   }
 }
