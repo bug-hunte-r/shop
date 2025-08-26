@@ -3,6 +3,7 @@ import { CreateAddressDto } from './dto/create-address.dto';
 import { UsersService } from 'src/users/users.service';
 import Address from 'models/address';
 import { Request } from 'express';
+import mongoose from 'mongoose';
 
 @Injectable()
 export class AddressService {
@@ -32,5 +33,16 @@ export class AddressService {
         }
 
         return allAddreses
+    }
+
+    async deleteAddress(id: mongoose.Types.ObjectId) {
+
+        const deletedAddress = await Address.findByIdAndDelete(id)
+
+        if (!deletedAddress) {
+            throw new NotFoundException('Address not found')
+        }
+
+        return 'Address deleted successfully'
     }
 }

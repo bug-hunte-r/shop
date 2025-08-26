@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Delete, Req, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Delete, Req, Res, Param } from '@nestjs/common';
 import { AddressService } from './address.service';
 import { CreateAddressDto } from './dto/create-address.dto';
 import type { Request, Response } from 'express';
+import mongoose from 'mongoose';
 
 @Controller('address')
 export class AddressController {
@@ -40,6 +41,23 @@ export class AddressController {
         message: error.message
       })
     }
-    
+
+  }
+
+  @Delete(':id')
+  async deleteAddress(@Res() res: Response, @Param('id') id: mongoose.Types.ObjectId) {
+    try {
+
+      const deleteAddress = await this.addressService.deleteAddress(id)
+
+      res.status(200).json({
+        deleteAddress
+      })
+
+    } catch (error) {
+      res.status(error.getStatus ? error.getStatus() : 500).json({
+        message: error.message
+      })
+    }
   }
 }
