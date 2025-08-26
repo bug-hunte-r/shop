@@ -32,4 +32,15 @@ export class ProductsService {
 
     return 'Product deleted successfully'
   }
+
+  async getAllProducts() {
+    const products = await Product.find({})
+
+    if (products.length === 0) {
+      throw new NotFoundException('Products not found')
+    }
+
+    return products
+  }
+
 }

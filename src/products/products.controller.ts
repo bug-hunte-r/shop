@@ -41,6 +41,24 @@ export class ProductsController {
         message: error.message
       })
     }
+
+  }
+
+  @Get()
+  async getAllProducts(@Res() res: Response) {
+    try {
+
+      const products = await this.productsService.getAllProducts()
+
+      res.status(200).json({
+        products
+      })
+
+    } catch (error) {
+      res.status(error.getStatus ? error.getStatus() : 500).json({
+        message: error.message
+      })
+    }
     
   }
 }
