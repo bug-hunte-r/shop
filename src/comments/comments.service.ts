@@ -3,6 +3,7 @@ import { CreateCommentDto } from './dto/create-comment.dto';
 import { UsersService } from 'src/users/users.service';
 import { Request } from 'express';
 import Comment from 'models/comment';
+import mongoose from 'mongoose';
 
 @Injectable()
 export class CommentsService {
@@ -32,5 +33,16 @@ export class CommentsService {
         }
 
         return allComments
+    }
+
+    async deleteCommentById(id: mongoose.Types.ObjectId) {
+
+        const deletedComment = await Comment.findByIdAndDelete(id)
+
+        if (!deletedComment) {
+            throw new NotFoundException('Comment not found')
+        }
+
+        return 'Comment deleted successfully'
     }
 }
