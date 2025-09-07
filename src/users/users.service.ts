@@ -1,7 +1,7 @@
 import { Injectable, BadRequestException, ConflictException, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { SignupDto } from './signup-dto/signup-dto';
-import User from 'models/user';
-import { hasePassHandler, verifyPassHandler, verifyTokenHandler } from 'configs/auth';
+import User from '../models/user';
+import { hasePassHandler, verifyPassHandler, verifyTokenHandler } from '../configs/auth';
 import { LoginDto } from './login-dto/login-dto';
 import { Request } from 'express';
 import mongoose from 'mongoose';

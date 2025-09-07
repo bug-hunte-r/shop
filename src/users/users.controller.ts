@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Req, Res, Delete, Param } from '@nestjs/co
 import { UsersService } from './users.service';
 import { SignupDto } from './signup-dto/signup-dto';
 import type { Request, Response } from 'express';
-import { generateToken } from 'configs/auth';
+import { generateToken } from '../configs/auth';
 import { LoginDto } from './login-dto/login-dto';
 import mongoose from 'mongoose';
 

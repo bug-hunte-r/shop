@@ -1,6 +1,6 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
-import Product from 'models/product';
+import Product from '../models/product';
 import mongoose from 'mongoose';
 
 @Injectable()

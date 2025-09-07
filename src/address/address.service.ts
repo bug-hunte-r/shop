@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAddressDto } from './dto/create-address.dto';
 import { UsersService } from 'src/users/users.service';
-import Address from 'models/address';
+import Address from '../models/address';
 import { Request } from 'express';
 import mongoose from 'mongoose';
 

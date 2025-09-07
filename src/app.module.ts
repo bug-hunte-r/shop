@@ -5,10 +5,10 @@ import { CategoryModule } from './category/category.module';
 import { ProductsModule } from './products/products.module';
 import { CommentsModule } from './comments/comments.module';
 import { AddressModule } from './address/address.module';
-import { OrderModule } from './order/order.module';
+import { TicketsModule } from './tickets/tickets.module';
 
 @Module({
-  imports: [UsersModule, CategoryModule, ProductsModule, CommentsModule, AddressModule, OrderModule],
+  imports: [UsersModule, CategoryModule, ProductsModule, CommentsModule, AddressModule, TicketsModule],
   controllers: [],
   providers: [UsersService],
 })

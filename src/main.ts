@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import cookieParser from 'cookie-parser'
-import connectToDb from 'configs/db';
+import connectToDb from './configs/db';
 
 async function bootstrap() {
   await connectToDb()

@@ -2,7 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UsersService } from 'src/users/users.service';
 import { Request } from 'express';
-import Comment from 'models/comment';
+import Comment from '../models/comment';
 import mongoose from 'mongoose';
 
 @Injectable()
