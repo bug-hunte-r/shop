@@ -1,5 +1,6 @@
 import { IsString, MinLength } from "class-validator";
 import mongoose from "mongoose";
+import { TicketStatus } from "src/enum/ticketEnum";
 
 export class CreateTicketDto {
 
@@ -8,10 +9,12 @@ export class CreateTicketDto {
     @IsString()
     @MinLength(3)
     subject: String;
-    
+
     @IsString()
     @MinLength(5)
     body: String;
 
-    replyTo: mongoose.Types.ObjectId
+    department: mongoose.Types.ObjectId;
+
+    status: TicketStatus
 }

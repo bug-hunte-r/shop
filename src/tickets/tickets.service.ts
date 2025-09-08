@@ -1,5 +1,27 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Req, UnauthorizedException } from '@nestjs/common';
 import { CreateTicketDto } from './dto/create-ticket.dto';
+import Ticket from 'src/models/ticket';
+import { UsersService } from 'src/users/users.service';
+import type { Request } from 'express';
 
 @Injectable()
-export class TicketsService {}
+export class TicketsService {
+    constructor(private readonly usersService: UsersService) { }
+
+    async addNewTicket(createTicketDto: CreateTicketDto, @Req() req: Request) {
+
+        if (!createTicketDto.body.trim() || !createTicketDto.subject.trim()) {
+            throw new BadRequestException('Datas are not valid')
+        }
+
+        const mainUser = await this.usersService.getOneUser(req)
+
+        const userId = mainUser._id
+
+        if (!userId) {
+            throw new UnauthorizedException('User not found')
+        }
+
+        await Ticket.create({ ...createTicketDto, user: userId })
+    }
+}
