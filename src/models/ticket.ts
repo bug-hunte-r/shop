@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { TicketStatus } from "src/enum/ticketEnum";
+import Department from "./department";
 
 const ticketSchema = new mongoose.Schema({
 
@@ -26,7 +27,8 @@ const ticketSchema = new mongoose.Schema({
 
     status: {
         required: true,
-        type: TicketStatus
+        type: Object.values(TicketStatus),
+        default: TicketStatus.Open
     },
 })
 
