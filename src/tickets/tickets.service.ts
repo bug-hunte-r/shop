@@ -19,9 +19,11 @@ export class TicketsService {
         const userId = mainUser._id
 
         if (!userId) {
-            throw new UnauthorizedException('User not found')
+            throw new UnauthorizedException('Please login first')
         }
 
         await Ticket.create({ ...createTicketDto, user: userId })
+
+        return 'Ticket added'
     }
 }
