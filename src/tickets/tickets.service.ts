@@ -26,4 +26,11 @@ export class TicketsService {
 
         return 'Ticket added'
     }
+
+    async getTickets() {
+
+        const allTickets = await Ticket.find({}).populate('department')
+
+        return allTickets
+    }
 }

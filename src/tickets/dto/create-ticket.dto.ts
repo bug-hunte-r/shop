@@ -18,9 +18,7 @@ export class CreateTicketDto {
 
     status: TicketStatus
 
-    @IsBoolean()
     hasAnswer: Boolean
     
-    @IsBoolean()
     isItAnswer: Boolean
 }

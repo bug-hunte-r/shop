@@ -20,6 +20,13 @@ export class TicketsController {
         message: error.message
       })
     }
-    
+
+  }
+
+  @Get()
+  async getTickets() {
+    const allTickets = await this.ticketsService.getTickets()
+
+    return allTickets
   }
 }
