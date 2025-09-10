@@ -30,6 +30,16 @@ const ticketSchema = new mongoose.Schema({
         type: Object.values(TicketStatus),
         default: TicketStatus.Open
     },
+
+    hasAnswer: {
+        type: Boolean,
+        default: false
+    },
+    
+    isItAnswer: {
+        type: Boolean,
+        default: false
+    }
 })
 
 
