@@ -37,9 +37,15 @@ export class TicketsService {
 
     async getTicketsAnswer(id: mongoose.Types.ObjectId) {
 
-        const allTicketsAnswer = await Ticket.find({ mainTicket: id })
+        const mainTicketsAswer = await Ticket.findOne({ _id: id })
 
-        if (!allTicketsAnswer) {
+        if (!mainTicketsAswer) {
+            throw new NotFoundException('Ticket not found')
+        }
+
+        const allTicketsAnswer = await Ticket.find({ mainTicket: mainTicketsAswer?._id })
+
+        if (allTicketsAnswer.length === 0) {
             throw new NotFoundException('This ticket not have any answer yet')
         }
 
@@ -51,6 +57,8 @@ export class TicketsService {
         const mainUser = await this.usersService.getOneUser(req)
 
         await Ticket.create({ ...createTicketDto, user: mainUser._id, isItAnswer: true, mainTicket: id })
+
+        await Ticket.findByIdAndUpdate(id, { $set: { hasAnswer: true } })
 
         return {
             message: 'Answer sent'
