@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { TicketStatus } from "src/enum/ticketEnum";
 import Department from "./department";
 
 const ticketSchema = new mongoose.Schema({
@@ -25,12 +24,6 @@ const ticketSchema = new mongoose.Schema({
         ref: 'Department'
     },
 
-    status: {
-        required: true,
-        type: Object.values(TicketStatus),
-        default: TicketStatus.Open
-    },
-
     hasAnswer: {
         type: Boolean,
         default: false
@@ -39,6 +32,11 @@ const ticketSchema = new mongoose.Schema({
     isItAnswer: {
         type: Boolean,
         default: false
+    },
+
+    mainTicket: {
+        type: mongoose.Types.ObjectId,
+        ref: 'Ticket'
     }
 })
 

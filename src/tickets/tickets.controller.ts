@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Param, Delete, Req, Res } from '@nestjs/co
 import { TicketsService } from './tickets.service';
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import type { Request, Response } from 'express';
+import mongoose from 'mongoose';
 
 @Controller('tickets')
 export class TicketsController {
@@ -29,4 +30,32 @@ export class TicketsController {
 
     return allTickets
   }
+
+  @Get('answer/:id')
+  async getTicketsAnswer(@Res() res: Response, @Param('id') id: mongoose.Types.ObjectId) {
+    try {
+
+      const allTicketsAnswer = await this.ticketsService.getTicketsAnswer(id)
+
+      res.status(200).json({
+        allTicketsAnswer
+      })
+
+    } catch (error) {
+
+      res.status(error.getStatus ? error.getStatus() : 500).json({
+        message: error.message
+      })
+    }
+
+  }
+
+  @Post('answer/:id')
+  async setAnswer(@Req() req: Request, @Body() createTicketDto: CreateTicketDto, @Param('id') id: mongoose.Types.ObjectId) {
+
+    const ticketsAnswer = await this.ticketsService.setAnswer(req, createTicketDto, id)
+
+    return ticketsAnswer
+  }
+
 }

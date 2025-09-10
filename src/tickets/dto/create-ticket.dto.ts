@@ -1,6 +1,5 @@
 import { IsBoolean, IsString, MinLength } from "class-validator";
 import mongoose from "mongoose";
-import { TicketStatus } from "src/enum/ticketEnum";
 
 export class CreateTicketDto {
 
@@ -16,9 +15,9 @@ export class CreateTicketDto {
 
     department: mongoose.Types.ObjectId;
 
-    status: TicketStatus
-
     hasAnswer: Boolean
     
     isItAnswer: Boolean
+
+    mainTicket: mongoose.Types.ObjectId
 }
