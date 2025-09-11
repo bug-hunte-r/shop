@@ -8,4 +8,4 @@ import { UsersModule } from 'src/users/users.module';
   controllers: [TicketsController],
   providers: [TicketsService],
 })
-export class TicketsModule { }
+export class TicketsModule {}

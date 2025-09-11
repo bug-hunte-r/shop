@@ -1,4 +1,4 @@
-import { IsBoolean, IsString, MinLength } from "class-validator";
+import { IsString, MaxLength, MinLength } from "class-validator";
 import mongoose from "mongoose";
 
 export class CreateTicketDto {
@@ -6,18 +6,21 @@ export class CreateTicketDto {
     user: mongoose.Types.ObjectId;
 
     @IsString()
-    @MinLength(3)
+    @MaxLength(20)
+    @MinLength(5)
     subject: String;
-
+    
     @IsString()
     @MinLength(5)
     body: String;
 
     department: mongoose.Types.ObjectId;
 
-    hasAnswer: Boolean
-    
-    isItAnswer: Boolean
+    sender: String;
 
-    mainTicket: mongoose.Types.ObjectId
+    hasAnswer: Boolean;
+
+    isItAnswer: Boolean;
+
+    mainTicket: mongoose.Types.ObjectId;
 }

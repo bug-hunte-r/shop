@@ -1,34 +1,37 @@
 import mongoose from "mongoose";
-import Department from "./department";
 
-const ticketSchema = new mongoose.Schema({
+const ticketSchame = new mongoose.Schema({
 
     user: {
-        required: true,
-        type: mongoose.Types.ObjectId
+        type: mongoose.Types.ObjectId,
+        required: true
     },
 
     subject: {
-        required: true,
-        type: String
+        type: String,
+        required: true
     },
 
     body: {
-        required: true,
-        type: String
+        type: String,
+        required: true
     },
 
     department: {
-        required: true,
         type: mongoose.Types.ObjectId,
-        ref: 'Department'
+        required: true
+    },
+
+    sender: {
+        type: String,
+        required: true
     },
 
     hasAnswer: {
         type: Boolean,
         default: false
     },
-    
+
     isItAnswer: {
         type: Boolean,
         default: false
@@ -36,11 +39,9 @@ const ticketSchema = new mongoose.Schema({
 
     mainTicket: {
         type: mongoose.Types.ObjectId,
-        ref: 'Ticket'
     }
 })
 
-
-const Ticket = mongoose.models.Ticket || mongoose.model('Ticket', ticketSchema)
+const Ticket = mongoose.models.Ticket || mongoose.model('Ticket', ticketSchame)
 
 export default Ticket

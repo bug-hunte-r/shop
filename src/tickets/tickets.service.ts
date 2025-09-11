@@ -1,67 +1,72 @@
-import { BadRequestException, Injectable, NotFoundException, Req, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import Ticket from 'src/models/ticket';
 import { UsersService } from 'src/users/users.service';
-import type { Request } from 'express';
+import { Request } from 'express';
 import mongoose from 'mongoose';
 
 @Injectable()
 export class TicketsService {
-    constructor(private readonly usersService: UsersService) { }
+  constructor(private readonly usersService: UsersService) { }
 
-    async addNewTicket(createTicketDto: CreateTicketDto, @Req() req: Request) {
+  async addNewTicket(createTicketDto: CreateTicketDto, req: Request, id: mongoose.Types.ObjectId) {
 
-        if (!createTicketDto.body.trim() || !createTicketDto.subject.trim()) {
-            throw new BadRequestException('Datas are not valid')
-        }
-
-        const mainUser = await this.usersService.getOneUser(req)
-
-        const userId = mainUser._id
-
-        if (!userId) {
-            throw new UnauthorizedException('Please login first')
-        }
-
-        await Ticket.create({ ...createTicketDto, user: userId })
-
-        return 'Ticket added'
+    if (!createTicketDto.subject.trim() || !createTicketDto.body.trim()) {
+      throw new BadRequestException('Datas are not valid')
     }
 
-    async getTickets() {
+    const mainUser = await this.usersService.getOneUser(req)
 
-        const allTickets = await Ticket.find({}).populate('department')
+    const userId = mainUser._id
 
-        return allTickets
+    await Ticket.create({ ...createTicketDto, user: userId, department: id, sender: 'USER' })
+
+    return 'Ticket added successfully'
+
+  }
+
+  async sendAnswer(createTicketDto: CreateTicketDto, req: Request, id: mongoose.Types.ObjectId) {
+
+    if (!createTicketDto.subject.trim() || !createTicketDto.body.trim()) {
+      throw new BadRequestException('Datas are not valid')
     }
 
-    async getTicketsAnswer(id: mongoose.Types.ObjectId) {
+    const mainUser = await this.usersService.getOneUser(req)
+    const userId = mainUser._id
 
-        const mainTicketsAswer = await Ticket.findOne({ _id: id })
+    await Ticket.create({ ...createTicketDto, user: userId, sender: 'ADMIN', isItAnswer: true, mainTicket: id })
 
-        if (!mainTicketsAswer) {
-            throw new NotFoundException('Ticket not found')
-        }
+    await Ticket.findByIdAndUpdate(id, { $set: { hasAnswer: true } })
 
-        const allTicketsAnswer = await Ticket.find({ mainTicket: mainTicketsAswer?._id })
+    return 'Answer sent'
+  }
 
-        if (allTicketsAnswer.length === 0) {
-            throw new NotFoundException('This ticket not have any answer yet')
-        }
+  async getAnswers(id: mongoose.Types.ObjectId) {
 
-        return allTicketsAnswer
+    const tickets = await Ticket.findOne({ _id: id })
+    const answers = await Ticket.find({ mainTicket: tickets._id })
+
+    if (answers.length === 0) {
+      throw new NotFoundException('This ticket not have any answer yet')
     }
 
-    async setAnswer(@Req() req: Request, createTicketDto: CreateTicketDto, id: mongoose.Types.ObjectId) {
+    return answers
+  }
 
-        const mainUser = await this.usersService.getOneUser(req)
+  async sendAnswerForUsers(createTicketDto: CreateTicketDto, req: Request, id: mongoose.Types.ObjectId) {
 
-        await Ticket.create({ ...createTicketDto, user: mainUser._id, isItAnswer: true, mainTicket: id })
-
-        await Ticket.findByIdAndUpdate(id, { $set: { hasAnswer: true } })
-
-        return {
-            message: 'Answer sent'
-        }
+    if (!createTicketDto.subject.trim() || !createTicketDto.body.trim()) {
+      throw new BadRequestException('Datas are not valid')
     }
+
+    const mainUser = await this.usersService.getOneUser(req)
+    const userId = mainUser._id
+
+    await Ticket.create({ ...createTicketDto, user: userId, sender: 'USER', isItAnswer: true, mainTicket: id })
+
+    await Ticket.findByIdAndUpdate(id, { $set: { hasAnswer: true } })
+
+    return 'Answer sent'
+  }
+
 }

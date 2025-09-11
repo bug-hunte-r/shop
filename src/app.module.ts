@@ -5,11 +5,11 @@ import { CategoryModule } from './category/category.module';
 import { ProductsModule } from './products/products.module';
 import { CommentsModule } from './comments/comments.module';
 import { AddressModule } from './address/address.module';
-import { TicketsModule } from './tickets/tickets.module';
 import { DepartmentModule } from './department/department.module';
+import { TicketsModule } from './tickets/tickets.module';
 
 @Module({
-  imports: [UsersModule, CategoryModule, ProductsModule, CommentsModule, AddressModule, TicketsModule, DepartmentModule],
+  imports: [UsersModule, CategoryModule, ProductsModule, CommentsModule, AddressModule, DepartmentModule, TicketsModule],
   controllers: [],
   providers: [UsersService],
 })
