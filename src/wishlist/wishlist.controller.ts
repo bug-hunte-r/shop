@@ -1,34 +1,28 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Req, Res } from '@nestjs/common';
 import { WishlistService } from './wishlist.service';
-import { CreateWishlistDto } from './dto/create-wishlist.dto';
-import { UpdateWishlistDto } from './dto/update-wishlist.dto';
+import type { Request, Response } from 'express';
+import mongoose from 'mongoose';
 
 @Controller('wishlist')
 export class WishlistController {
-  constructor(private readonly wishlistService: WishlistService) {}
+  constructor(private readonly wishlistService: WishlistService) { }
 
-  @Post()
-  create(@Body() createWishlistDto: CreateWishlistDto) {
-    return this.wishlistService.create(createWishlistDto);
+  @Post(':id')
+  async addWishlist(@Req() req: Request, @Param('id') id: mongoose.Types.ObjectId, @Res() res: Response) {
+    try {
+
+      const newWishlist = await this.wishlistService.addWishlist(req, id)
+
+      res.status(201).json({
+        newWishlist
+      })
+
+    } catch (error) {
+      res.status(error.getStatus ? error.getStatus() : 500).json({
+        message: error.message
+      })
+    }
+
   }
 
-  @Get()
-  findAll() {
-    return this.wishlistService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.wishlistService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateWishlistDto: UpdateWishlistDto) {
-    return this.wishlistService.update(+id, updateWishlistDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.wishlistService.remove(+id);
-  }
 }

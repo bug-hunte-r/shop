@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const wishlistSchame = new mongoose.Schema({
+const wishlistSchema = new mongoose.Schema({
 
     user: {
         required: true,
@@ -16,6 +16,8 @@ const wishlistSchame = new mongoose.Schema({
 
 })
 
-const Wishlist = mongoose.models.Wishlist || mongoose.model('Wishlist', wishlistSchame)
+wishlistSchema.index({ user: 1, product: 1 }, { unique: true });
+
+const Wishlist = mongoose.models.Wishlist || mongoose.model('Wishlist', wishlistSchema)
 
 export default Wishlist

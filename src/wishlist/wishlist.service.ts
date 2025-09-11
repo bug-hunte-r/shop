@@ -1,26 +1,30 @@
-import { Injectable } from '@nestjs/common';
-import { CreateWishlistDto } from './dto/create-wishlist.dto';
-import { UpdateWishlistDto } from './dto/update-wishlist.dto';
+import { ConflictException, Injectable } from '@nestjs/common';
+import { UsersService } from 'src/users/users.service';
+import Wishlist from 'src/models/wishlist';
+import { Request } from 'express';
+import mongoose from 'mongoose';
 
 @Injectable()
 export class WishlistService {
-  create(createWishlistDto: CreateWishlistDto) {
-    return 'This action adds a new wishlist';
+  constructor(private readonly usersSerive: UsersService) { }
+
+  async addWishlist(req: Request, id: mongoose.Types.ObjectId) {
+
+    try {
+      const mainUser = await this.usersSerive.getOneUser(req)
+      const userId = mainUser._id
+
+      await Wishlist.create({ user: userId, product: id })
+
+      return 'Product added to wishlist'
+
+    } catch (error) {
+
+      if (error.code === 11000) {
+        throw new ConflictException('This wish is already exist in your wishlist')
+      }
+
+    }
   }
 
-  findAll() {
-    return `This action returns all wishlist`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} wishlist`;
-  }
-
-  update(id: number, updateWishlistDto: UpdateWishlistDto) {
-    return `This action updates a #${id} wishlist`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} wishlist`;
-  }
 }
