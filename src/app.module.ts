@@ -7,9 +7,10 @@ import { CommentsModule } from './comments/comments.module';
 import { AddressModule } from './address/address.module';
 import { DepartmentModule } from './department/department.module';
 import { TicketsModule } from './tickets/tickets.module';
+import { WishlistModule } from './wishlist/wishlist.module';
 
 @Module({
-  imports: [UsersModule, CategoryModule, ProductsModule, CommentsModule, AddressModule, DepartmentModule, TicketsModule],
+  imports: [UsersModule, CategoryModule, ProductsModule, CommentsModule, AddressModule, DepartmentModule, TicketsModule, WishlistModule],
   controllers: [],
   providers: [UsersService],
 })
