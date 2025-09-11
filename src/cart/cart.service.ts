@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCartDto } from './dto/create-cart.dto';
 import { UsersService } from 'src/users/users.service';
 import { Request } from 'express';
@@ -10,6 +10,7 @@ export class CartService {
     constructor(private readonly usersService: UsersService) { }
 
     async addProductToCart(createCartDto: CreateCartDto, req: Request, id: mongoose.Types.ObjectId) {
+
         try {
 
             const mainUser = await this.usersService.getOneUser(req)
@@ -27,9 +28,23 @@ export class CartService {
                 })
 
                 return 'Product count is update'
-                
+
             }
         }
 
+    }
+
+    async getProductsInCart(req: Request) {
+
+        const mainUser = await this.usersService.getOneUser(req)
+        const userId = mainUser._id
+
+        const allProducts = await Cart.find({ user: userId }).populate('user', 'username').populate('product')
+
+        if (allProducts.length === 0) {
+            throw new NotFoundException('This users cart is empty')
+        }
+
+        return allProducts
     }
 }
