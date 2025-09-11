@@ -21,9 +21,13 @@ export class CartService {
             return 'Product added to cart'
 
         } catch (error) {
+
             if (error.code === 11000) {
 
-                await Cart.findOneAndUpdate({ product: id }, {
+                const mainUser = await this.usersService.getOneUser(req)
+                const userId = mainUser._id
+
+                await Cart.findOneAndUpdate({ product: id, user: userId }, {
                     $inc: { count: + 1 }
                 })
 
@@ -46,5 +50,12 @@ export class CartService {
         }
 
         return allProducts
+    }
+
+    async removeProductFromCart(id: mongoose.Types.ObjectId) {
+
+        const removedProduct = await Cart.findOneAndDelete({ _id: id })
+
+        return 'Product removed from cart'
     }
 }

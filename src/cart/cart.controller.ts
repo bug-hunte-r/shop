@@ -36,4 +36,15 @@ export class CartController {
     }
 
   }
+
+  @Delete('removeProduct/:id')
+  async removeProductFromCart(@Param('id') id: mongoose.Types.ObjectId) {
+
+    const removedProduct = await this.cartService.removeProductFromCart(id)
+
+    return {
+      removedProduct
+    }
+
+  }
 }
