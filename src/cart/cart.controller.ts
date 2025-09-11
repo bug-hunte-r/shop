@@ -1,8 +1,21 @@
-import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Req, Res } from '@nestjs/common';
 import { CartService } from './cart.service';
 import { CreateCartDto } from './dto/create-cart.dto';
+import type { Request, Response } from 'express';
+import mongoose from 'mongoose';
 
 @Controller('cart')
 export class CartController {
-  constructor(private readonly cartService: CartService) {}
+  constructor(private readonly cartService: CartService) { }
+
+  @Post(':id')
+  async addProductToCart(@Body() createCartDto: CreateCartDto, @Req() req: Request, @Res() res: Response, @Param('id') id: mongoose.Types.ObjectId) {
+
+    const productsInCart = await this.cartService.addProductToCart(createCartDto, req, id)
+
+    res.status(201).json({
+      productsInCart
+    })
+    
+  }
 }

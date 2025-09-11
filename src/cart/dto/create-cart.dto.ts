@@ -8,6 +8,5 @@ export class CreateCartDto {
     product: mongoose.Types.ObjectId;
 
     @IsInt()
-    @MinLength(0)
     count: Number
 }

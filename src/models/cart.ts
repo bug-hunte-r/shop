@@ -16,9 +16,12 @@ const cartSchema = new mongoose.Schema({
 
     count: {
         required: true,
-        type: Number
+        type: Number,
+        default: 1
     }
 })
+
+cartSchema.index({ user: 1, product: 1 }, { unique: true });
 
 const Cart = mongoose.models.Cart || mongoose.model('Cart', cartSchema)
 
