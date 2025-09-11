@@ -42,4 +42,15 @@ export class WishlistService {
 
   }
 
+  async removeWish(id: mongoose.Types.ObjectId) {
+
+    const deletedWish = await Wishlist.findOneAndDelete({ _id: id })
+
+    if (!deletedWish) {
+      throw new NotFoundException('Wish not exist')
+    }
+
+    return 'Wish removed'
+  }
+
 }

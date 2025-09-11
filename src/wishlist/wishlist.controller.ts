@@ -42,4 +42,22 @@ export class WishlistController {
     }
 
   }
+
+  @Delete(':id')
+  async removeWish(@Param('id') id: mongoose.Types.ObjectId, @Res() res: Response) {
+    try {
+
+      const removedWish = await this.wishlistService.removeWish(id)
+
+      res.status(200).json({
+        removedWish
+      })
+
+    } catch (error) {
+      res.status(error.getStatus ? error.getStatus() : 500).json({
+        message: error.message
+      })
+    }
+    
+  }
 }
