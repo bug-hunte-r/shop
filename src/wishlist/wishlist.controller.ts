@@ -25,4 +25,21 @@ export class WishlistController {
 
   }
 
+  @Get()
+  async getWishes(@Req() req: Request, @Res() res: Response) {
+    try {
+
+      const usersWishes = await this.wishlistService.getWishes(req)
+
+      res.status(200).json({
+        usersWishes
+      })
+
+    } catch (error) {
+      res.status(error.getStatus ? error.getStatus() : 500).json({
+        message: error.message
+      })
+    }
+
+  }
 }

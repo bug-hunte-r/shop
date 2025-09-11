@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import Wishlist from 'src/models/wishlist';
 import { Request } from 'express';
@@ -25,6 +25,21 @@ export class WishlistService {
       }
 
     }
+  }
+
+  async getWishes(req: Request) {
+
+    const mainUser = await this.usersSerive.getOneUser(req)
+    const userId = mainUser._id
+
+    const usersWishes = await Wishlist.find({ user: userId }).populate('user').populate('product')
+
+    if (usersWishes.length === 0) {
+      throw new NotFoundException('This user not have any wishes')
+    }
+
+    return usersWishes
+
   }
 
 }
