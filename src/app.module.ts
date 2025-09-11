@@ -8,9 +8,10 @@ import { AddressModule } from './address/address.module';
 import { DepartmentModule } from './department/department.module';
 import { TicketsModule } from './tickets/tickets.module';
 import { WishlistModule } from './wishlist/wishlist.module';
+import { CartModule } from './cart/cart.module';
 
 @Module({
-  imports: [UsersModule, CategoryModule, ProductsModule, CommentsModule, AddressModule, DepartmentModule, TicketsModule, WishlistModule],
+  imports: [UsersModule, CategoryModule, ProductsModule, CommentsModule, AddressModule, DepartmentModule, TicketsModule, WishlistModule, CartModule],
   controllers: [],
   providers: [UsersService],
 })
