@@ -49,7 +49,15 @@ export class CartService {
             throw new NotFoundException('This users cart is empty')
         }
 
-        return allProducts
+        const totalPrice = allProducts.reduce((sum, item) => {
+            return sum + item.product.price * item.count;
+        }, 0);
+
+        await Cart.findOneAndUpdate({ user: userId }, {
+            $set: { totalPrice: totalPrice }
+        })
+
+        return { allProducts, totalPrice }
     }
 
     async removeProductFromCart(id: mongoose.Types.ObjectId) {
